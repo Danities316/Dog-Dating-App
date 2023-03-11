@@ -5,19 +5,25 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Users from "./components/Users";
-import { Counter } from "./features/counter/counter";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from "./components/Dashboard"
+import Onboarding from "./components/Onboarding"
+import DogsItem from "./components/DogsItem"
+
 
 export function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/counter" element={<Counter />} />
+        {/* <Route path="/onboarding" element={<Onboarding />} /> */}
+        {/* <Route path="/dogsitem" element={<Onboarding />} /> */}
       </Routes>
+      <ToastContainer />
     </>
   );
 }

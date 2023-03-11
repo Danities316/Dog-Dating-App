@@ -17,7 +17,7 @@ const DogSchema = mongoose.Schema({
     type: String,
     // required: [true, "Please add Dog Type"],
   },
-  DogDescrition: {
+  DogDescription: {
     type: String,
     // required: [true, "Please add Description"],
   },

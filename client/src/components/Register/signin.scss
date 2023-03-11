@@ -51,7 +51,38 @@ button:focus {
   -webkit-transition: all .2s ease;
   transition: all .2s ease;
 }
+.dogs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
 
+.dog-content {
+  width: 70%;
+  margin: 0 auto;
+}
+.dog {
+  background-color: #f4f4f4;
+  margin: 10px 0;
+  padding: 20px 0 10px;
+  position: relative;
+}
+
+.dog .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.item-content {
+  background-color: #f4f4f4;
+  margin: 10px 0;
+  padding: 20px 0 10px;
+  position: relative;
+}
 .ghost-round {
   cursor: pointer;
   background: none;
@@ -173,7 +204,7 @@ button:focus {
   flex-flow: column;
   box-shadow: 0px 15px 50px 10px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  height: 560px;
+  height: 660px;
   width: 360px;
   background: #fff;
   background: url('https://pexels.imgix.net/photos/27718/pexels-photo-27718.jpg?fit=crop&w=1280&h=823') top left no-repeat;
@@ -184,7 +215,7 @@ button:focus {
   background: linear-gradient(#8CA6DB, #B993D6);
   opacity: 0.85;
   filter: alpha(opacity=85);
-  height: 560px;
+  height: 660px;
   position: absolute;
   width: 360px;
   z-index: 1;
@@ -203,7 +234,49 @@ button:focus {
     background: url('https://pexels.imgix.net/photos/27718/pexels-photo-27718.jpg?fit=crop&w=1280&h=823') left no-repeat;
   background-size:cover;
 }
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.loadingSpinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #000 transparent #555 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+fieldset {
+  overflow: hidden
+}
+
+.some-class {
+  float: left;
+  clear: none;
+}
+
+label {
+  float: left;
+  clear: none;
+  display: block;
+  padding: 0px 1em 0px 8px;
+}
+
+input[type=radio],
+input.radio {
+  float: left;
+  clear: none;
+  margin: 2px 0 0 2px;
+}
 @media (max-width: 500px) {
   .window {
     width: 100%;

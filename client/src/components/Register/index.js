@@ -1,32 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import axios from "axios";
+import { register, reset } from "../../features/auth/authSlice";
 import "./signin.scss";
 import Navbar from "../Navbar";
+import Spinner from "../Spinner";
 
-export default function Signin() {
-  const [registerUsername, setRegisterUsername] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerPassword2, setRegisterPassword2] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
+export default function Register() {
 
-  const submit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await axios.post("http://localhost:3000/api/users/register", {
-        data: {
-          username: registerUsername,
-          password: registerPassword,
-          password2: registerPassword2,
-          email: registerEmail,
-        },
-        withCredentials: true,
-      });
-      console.log(data)
-    } catch (error) {
-      console.log(error);
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    password2: '',
+    email: '',
+  });
+
+  const { username, password, password2, email } = formData;
+
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+
+
+  useEffect(() => {
+    if(isError){
+      toast.error(message)
+    }else if(isSuccess || user){
+      navigate('/onboarding')
+    }else{
+      dispatch(reset())
     }
-  };
+
+   
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    })
+    )
+  }
+
+  const submit = (e) => {
+    e.preventDefault()
+    if(password !== password2){
+      toast.error("Password do not Match!")
+    }else{
+      const userData = {
+        username,
+        email,
+        password,
+      }
+      dispatch(register(userData))
+    }
+  }
+
+  if(isLoading){
+    return <Spinner />
+  }
+  
 
   return (
     <>
@@ -48,28 +88,28 @@ export default function Signin() {
                   name="username"
                   placeholder="Username"
                   className="input-line full-width"
-                  onChange={(e) => setRegisterUsername(e.target.value)}
+                  onChange={onChange}
                 ></input>
                 <input
                   type="email"
                   name="email"
                   placeholder="Email"
                   className="input-line full-width"
-                  onChange={(e) => setRegisterEmail(e.target.value)}
+                  onChange={onChange}
                 ></input>
                 <input
                   type="password"
                   name="password"
                   placeholder="Password"
                   className="input-line full-width"
-                  onChange={(e) => setRegisterPassword(e.target.value)}
+                  onChange={onChange}
                 ></input>
                  <input
                   type="password"
                   name="password2"
                   placeholder="Confirmed Password"
                   className="input-line full-width"
-                  onChange={(e) => setRegisterPassword2(e.target.value)}
+                  onChange={onChange}
                 ></input>
               </div>
               <div className="spacing">

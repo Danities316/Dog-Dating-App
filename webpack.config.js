@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const stylesHandler = 'style-loader';
+const HttpsProxyAgent = require('https-proxy-agent');
 
 module.exports = {
   entry: './client/src/index.js',
@@ -30,6 +31,7 @@ module.exports = {
               test:  /\.s[ac]ss$/i,
               use: [stylesHandler, 'css-loader', 'sass-loader'],
             },
+            { test: /\.css$/, use: 'css-loader' },
       //       {
       //   test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
       //   type: 'asset',
@@ -55,6 +57,8 @@ module.exports = {
         },
         compress: true,
         port: 9000,
+        hot: true,
+        open: true,
       },
       plugins: [
         new webpack.ProvidePlugin({

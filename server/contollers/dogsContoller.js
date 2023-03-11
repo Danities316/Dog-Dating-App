@@ -29,12 +29,21 @@ const registerDog = asyncHandler(async (req, res) => {
    res.status(200).json(dog)
 });
 
-//@desc    Get Dogs Details
+//@desc    Get all Dogs Details by user
 //@route    GET /api/dogs/data
 //@access   Public
 const getDog = asyncHandler(async (req, res) => {
     // get req.user.id is coming from the authMiddleware
     const dogs = await Dogs.find({user: req.user.id})
+    res.status(200).json(dogs)
+});
+
+//@desc    Get all Dogs Details
+//@route    GET /api/dogs/data
+//@access   Public
+const getAllDog = asyncHandler(async (req, res) => {
+    // get req.user.id is coming from the authMiddleware
+    const dogs = await Dogs.find({})
     res.status(200).json(dogs)
 });
 
@@ -47,15 +56,14 @@ const deleteDog = asyncHandler(async(req, res) => {
     res.status(400)
     throw new Error('Dog not Found!')
    }
-   const user = await User.findById(req.user.id)
 
    //check user
-   if(!user){
+   if(!req.user){
        res.status(401)
        throw new Error("User not found!")
    }
    //Ensure the logged in user matches dog user
-   if(dog.user.toStrin() !== user.id){
+   if(dog.user.toString() !== req.user.id){
        res.status(401)
        throw new Error("User not Authorized!")
    }
@@ -74,15 +82,13 @@ const updateDog = asyncHandler(async(req, res) => {
         throw new Error('Dog not Found!')
     }
 
-    const user = await User.findById(req.user.id)
-
-    //check user
-    if(!user){
+    //check user -  User is coming from authMiddleware
+    if(!req.user){
         res.status(401)
         throw new Error("User not found!")
     }
     //Ensure the logged in user matches dog user
-    if(dog.user.toStrin() !== user.id){
+    if(dog.user.toString() !== req.user.id){
         res.status(401)
         throw new Error("User not Authorized!")
     }
@@ -95,6 +101,7 @@ const updateDog = asyncHandler(async(req, res) => {
 module.exports = {
     registerDog,
     getDog,
+    getAllDog,
     deleteDog,
     updateDog
 

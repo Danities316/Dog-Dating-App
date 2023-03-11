@@ -1,26 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login, reset } from "../../features/auth/authSlice";
 import axios from "axios";
 import "./signin.scss";
 import Navbar from "../Navbar";
-export default function Signin() {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+import Spinner from "../Spinner";
+
+
+
+export default function Login() {
+  const [formData, setFormData] = useState({
+    password: '',
+    email: '',
+  });
+
+  const { username, password, password2, email } = formData;
+
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+
+  useEffect(() => {
+    if(isError){
+      toast.error(message)
+    }else if(isSuccess || user ){
+      navigate('/dashboard')
+    }else{
+      dispatch(reset())
+    }
+
+    
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    })
+    )
+  }
 
   const submit = async (e) => {
-    e.preventDefault();
-    try {
-      const result = await axios.post("http://localhost:3000/api/users/login",  {
-          email: loginEmail,
-          password: loginPassword,
-          withCredentials: true
-        }
-      );
-        console.log(result);
-    } catch (error) {
-      console.log(error);
+    e.preventDefault()
+    const userData = {
+      email,
+      password,
     }
+    dispatch(login(userData))
   };
+
+  if(isLoading){
+    return <Spinner />
+  }
 
   return (
     <>
@@ -39,14 +76,14 @@ export default function Signin() {
                   name="email"
                   placeholder="Email"
                   className="input-line full-width"
-                  onChange={(e) => setLoginEmail(e.target.value)}
+                  onChange={onChange}
                 ></input>
                 <input
                   name="password"
                   type="password"
                   placeholder="Password"
                   className="input-line full-width"
-                  onChange={(e) => setLoginPassword(e.target.value)}
+                  onChange={onChange}
                 ></input>
               </div>
               <div>

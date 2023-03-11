@@ -10,6 +10,7 @@ require('dotenv').config()
 //@access   Public
 const registerUser = asyncHandler(async(req, res) => {
     const { username, email, password} = req.body
+    const body = req.body
     if(!username || !email || !password){
         res.status(400)
         throw new Error('Please provide credentials')
@@ -21,7 +22,6 @@ const registerUser = asyncHandler(async(req, res) => {
         throw new Error(`User with ${email}, already exists.`)
     }
 
-   
     // Hash the password
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(password, salt);
@@ -30,6 +30,7 @@ const registerUser = asyncHandler(async(req, res) => {
         username,
         email,
         password: hashPassword
+        
     })
     if(user){
         res.status(201).json({
@@ -81,15 +82,44 @@ if(!email || !password){
 //@access   Public
 const getMe = asyncHandler(async(req, res) => {
     //req.user.id is coming from the authMiddleware
-   const { _id, email, username} = await User.findById(req.user.id);
-   res.status(200).json({
-    _id,
-    username,
-    email
-   })
+   res.status(200).json(req.user)
 });
 
+//@desc     Get User data
+//@route    GET /api/users/allUsers
+//@access   Public
+const getAllUser = asyncHandler(async(req, res) => {
+    //req.user.id is coming from the authMiddleware
+    const users = await User.find({})
+   res.status(200).json(users)
+});
 
+//@desc     Get User data
+//@route    GET /api/users/allUsers
+//@access   Public
+const PartnerSearch = asyncHandler(async(req, res) => {
+    //req.user.id is coming from the authMiddleware
+    const gender = req.body.gender
+    const users = await User.find({})
+    let userId = users._id
+    
+   res.status(200).json(users)
+});
+
+//@desc     Update User data
+//@route    GET /api/users/updateuser
+//@access   Private
+const updateUser = asyncHandler(async(req, res) => {
+    //check user -  User is coming from authMiddleware
+   
+    if(!req.user){
+        res.status(401)
+        throw new Error("User not found!")
+    }
+    const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true})
+    res.status(200).json(updateUser);
+  
+});
 
 // Generate JWT 
 const generateToken = (id) => {
@@ -98,9 +128,13 @@ const generateToken = (id) => {
     })
 }
 
+
 module.exports = {
     registerUser,
+    updateUser,
     loginUser,
-    getMe
+    getMe,
+    getAllUser
 
 }
+

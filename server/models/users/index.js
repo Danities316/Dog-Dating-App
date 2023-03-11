@@ -32,10 +32,10 @@ const UserSchema = mongoose.Schema({
   PhoneNumber: {
     type: String,
     // required: true,
-    min: [11, "Number must be 11 numbers"],
-    max: [11, "Number must be  11 numbers"],
+    min: [12, "Number must be 11 numbers"],
+    max: [12, "Number must be  11 numbers"],
   },
-  Descrition: {
+  Description: {
     type: String,
     // required: [true, "Please add Description"],
   },
@@ -62,6 +62,8 @@ const UserSchema = mongoose.Schema({
     required: [true, "Please add Password"],
   },
   salt: String,
+}, {
+  timpstamps: true
 });
 
 UserSchema.pre("save", async function (next) {
@@ -82,22 +84,6 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-//   UserSchema.method = {
-//      makeSalt: function() {
-//         return crypto.randomBytes(16).toString('base64');
-//     },
-
-//     authenticate: ((plainText) => {
-//         return this.encryptPassword(plainText) == this.hashPassword;
-//     }),
-
-//     encryptPassword : ((password) => {
-//         if(!password || !this.salt) return '';
-//         var salt = new Buffer(this.salt, 'base64');
-//         return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sh512').toString('base64')
-//     })
-
-//   }
 UserSchema.methods.matchPassword = async (password) => {
   try {
     return await bcrypt.compare(password, this.password);

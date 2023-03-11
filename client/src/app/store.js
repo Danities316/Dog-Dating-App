@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from '../features/counter/counterSlice'
+import authReducer from '../features/auth/authSlice'
+import dogsReducer from '../features/dogs/dogSlice'
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
+    // counter: counterReducer,
+    auth: authReducer,
+    dog: dogsReducer, 
   },
 })
