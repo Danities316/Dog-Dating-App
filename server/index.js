@@ -37,6 +37,7 @@ app.use(bodyParser.json());
 //---------------------------- Mongoose ---------------------
 //connecting to th database
 const dbUrl = 'mongodb://127.0.0.1/datingApp';
+// const dbUrl = `mongodb+srv://danities:${process.env.P_WORD}@cluster0.iksrsrk.mongodb.net/?retryWrites=true&w=majority`;
 const dbOptions = {
   //useMonoClient: true,
   promiseLibrary: promise,
